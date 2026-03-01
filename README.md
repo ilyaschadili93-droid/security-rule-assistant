@@ -16,7 +16,7 @@ The system provides interactive security rule analysis, search functionality, an
 - Standalone Angular architecture  
 
 
-## 🛠 Technologies Used
+# Technologies Used
 
 - Angular  
 - TypeScript  
