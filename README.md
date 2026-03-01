@@ -1,2 +1,54 @@
-# security-rule-assistant
-Security Rule Explanation Assistant is an intelligent Angular-based application designed to analyze and explain security rules using an AI-assisted assistance system. The project provides interactive rule visualization, search functionality, and automated explanation support.
+#  Security Rule Explanation Assistant
+
+# Overview
+
+Security Rule Explanation Assistant is an intelligent Angular-based application designed to help users understand security rules using an AI-assisted explanation system.
+
+The system provides interactive security rule analysis, search functionality, and automated explanation generation.
+
+
+# Features
+
+- Display security rules list  
+- AI-powered explanation assistant  
+- Search security rule functionality  
+- Interactive user interface  
+- Standalone Angular architecture  
+
+
+## 🛠 Technologies Used
+
+- Angular  
+- TypeScript  
+- HTML5  
+- CSS3  
+- Bootstrap (if used)  
+- JSON-based rule dataset  
+
+
+# Deployment
+
+The project can be deployed using modern static hosting platforms.
+
+
+# Project Structure
+
+- Components-based architecture  
+- Service-driven data handling  
+- Modular UI design  
+
+
+# Author
+
+Developed by Ilyas CHADILI
+
+
+# Year
+
+© 2026 Security Rule Assistant – Developed by Ilyas CHADILI
+
+# Notes
+
+- This project is part of academic evaluation.  
+- Source code is available on GitHub repository.
+
