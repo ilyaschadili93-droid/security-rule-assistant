@@ -1,0 +1,53 @@
+.dev-name {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.clickable-title {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.rule-item {
+  transition: 0.2s;
+}
+
+.rule-item:hover {
+  background: #f4f8f5;
+}
+
+.rule-text {
+  cursor: pointer;
+}
+
+/* ===== AI BUTTON STYLE ===== */
+.btn-ai-custom {
+  background-color: #1e7d5f !important;
+  border-color: #1e7d5f !important;
+  color: white !important;
+  transition: 0.3s;
+}
+
+.btn-ai-custom:hover {
+  background-color: #16634a !important;
+  border-color: #16634a !important;
+}
+
+/* LOADING FADE EFFECT */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* SCORE BOX */
+.score-box {
+  padding: 20px;
+  background: #f8faf9;
+  border-radius: 10px;
+  font-weight: bold;
+}

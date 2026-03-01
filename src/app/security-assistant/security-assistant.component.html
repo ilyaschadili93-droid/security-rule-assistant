@@ -1,0 +1,86 @@
+<div class="container mt-4">
+
+  <div class="dev-name">
+    Developed by : ILYAS CHADILI
+  </div>
+
+  <h2 class="text-center mb-4">
+    🔐 Security Rule Assistant
+  </h2>
+
+  <!-- CHECKLIST TITLE -->
+  <h5 class="clickable-title" (click)="toggleChecklist()">
+    🔐 Security Checklist
+  </h5>
+
+  <div *ngIf="showChecklist">
+
+    <!-- SEARCH BAR -->
+    <div class="input-group mb-3">
+
+      <input class="form-control"
+             [(ngModel)]="searchText"
+             (ngModelChange)="searchRules()"
+             placeholder="Search security rule...">
+
+      <button class="btn btn-outline-dark"
+              (click)="searchRules()">
+        🔍 Search
+      </button>
+
+    </div>
+
+    <!-- RULE LIST -->
+    <ul class="list-group">
+
+      <li class="list-group-item rule-item"
+          *ngFor="let rule of filteredRules">
+
+        <input type="checkbox"
+               [(ngModel)]="rule.selected"
+               (change)="selectRule(rule)"
+               class="me-2">
+
+        <span (click)="selectRule(rule)" class="rule-text">
+          {{ rule["Verification Requirement"] }}
+        </span>
+
+      </li>
+
+    </ul>
+
+    <!-- AI BUTTON -->
+    <button class="btn btn-ai-custom mt-3"
+            (click)="explainRule()"
+            [disabled]="!selectedRule || loading">
+
+      {{ loading ? 'Processing...' : 'Explain by AI' }}
+
+    </button>
+
+    <!-- LOADING TEXT -->
+    <div *ngIf="loading" class="mt-3 text-info">
+      🤖 AI is generating explanation... Please click Search first.
+    </div>
+
+    <!-- AI RESPONSE -->
+    <div *ngIf="explanation" class="alert alert-info mt-3 fade-in">
+
+      {{ explanation }}
+
+      <button class="btn btn-sm btn-dark ms-2"
+              (click)="speakText(explanation)">
+        🔊 Speak
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- SCORE -->
+  <div class="score-box mt-4 text-center">
+    Compliance Security Score
+    <h3>{{ calculateScore() }}%</h3>
+  </div>
+
+</div>
