@@ -22,7 +22,7 @@ The system provides interactive security rule analysis, search functionality, an
 - TypeScript  
 - HTML5  
 - CSS3  
-- Bootstrap (if used)  
+- Bootstrap   
 - JSON-based rule dataset  
 
 
