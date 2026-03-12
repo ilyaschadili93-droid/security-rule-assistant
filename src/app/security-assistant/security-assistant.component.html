@@ -1,86 +1,282 @@
-<div class="container mt-4">
+<div class="app-shell">
 
-  <div class="dev-name">
-    Developed by : ILYAS CHADILI
+  <!-- ===== NOTIFICATIONS ===== -->
+  <div class="notifications-container">
+    <div
+      *ngFor="let notif of notifications"
+      class="notif-toast"
+      [class.notif-success]="notif.type === 'success'"
+      [class.notif-warning]="notif.type === 'warning'"
+      [class.notif-info]="notif.type === 'info'"
+      [class.notif-error]="notif.type === 'error'">
+      <i class="fas" [class.fa-check-circle]="notif.type === 'success'"
+                     [class.fa-triangle-exclamation]="notif.type === 'warning'"
+                     [class.fa-circle-info]="notif.type === 'info'"
+                     [class.fa-circle-xmark]="notif.type === 'error'"></i>
+      <span>{{ notif.message }}</span>
+    </div>
   </div>
 
-  <h2 class="text-center mb-4">
-    🔐 Security Rule Assistant
-  </h2>
+  <!-- ===== HEADER ===== -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="header-icon">🛡️</div>
+      <div>
+        <div class="header-title">Secure<span>Guard</span></div>
+        <div class="header-subtitle">Security Rule Assistant · v2.0</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        System Online
+      </div>
+      <div class="author-tag">by Ilyas Chadili</div>
+    </div>
+  </header>
 
-  <!-- CHECKLIST TITLE -->
-  <h5 class="clickable-title" (click)="toggleChecklist()">
-    🔐 Security Checklist
-  </h5>
+  <!-- ===== DASHBOARD ===== -->
+  <section class="dashboard">
 
-  <div *ngIf="showChecklist">
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
 
-    <!-- SEARCH BAR -->
-    <div class="input-group mb-3">
+      <div class="kpi-card kpi-total">
+        <div class="kpi-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-value">{{ rules.length }}</div>
+          <div class="kpi-label">Total Rules</div>
+        </div>
+        <div class="kpi-trend"><i class="fas fa-database"></i></div>
+      </div>
 
-      <input class="form-control"
-             [(ngModel)]="searchText"
-             (ngModelChange)="searchRules()"
-             placeholder="Search security rule...">
+      <div class="kpi-card kpi-done">
+        <div class="kpi-icon"><i class="fas fa-circle-check"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-value">{{ getImplementedCount() }}</div>
+          <div class="kpi-label">Implemented</div>
+        </div>
+        <div class="kpi-trend up" *ngIf="getImplementedCount() > 0">
+          <i class="fas fa-arrow-trend-up"></i>
+        </div>
+      </div>
 
-      <button class="btn btn-outline-dark"
-              (click)="searchRules()">
-        🔍 Search
+      <div class="kpi-card kpi-pending">
+        <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-value">{{ rules.length - getImplementedCount() }}</div>
+          <div class="kpi-label">Pending</div>
+        </div>
+        <div class="kpi-trend"><i class="fas fa-hourglass-half"></i></div>
+      </div>
+
+      <div class="kpi-card kpi-score"
+        [class.kpi-score-high]="calculateScore() >= 70"
+        [class.kpi-score-mid]="calculateScore() >= 30 && calculateScore() < 70">
+        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-value">{{ calculateScore() }}<small>%</small></div>
+          <div class="kpi-label">Compliance</div>
+        </div>
+        <div class="kpi-badge"
+          [class.badge-low]="calculateScore() < 30"
+          [class.badge-mid]="calculateScore() >= 30 && calculateScore() < 70"
+          [class.badge-high]="calculateScore() >= 70">
+          {{ calculateScore() < 30 ? 'LOW' : calculateScore() < 70 ? 'MID' : 'HIGH' }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dashboard Bottom Row -->
+    <div class="dashboard-bottom">
+
+      <div class="progress-panel">
+        <div class="panel-title"><i class="fas fa-chart-bar"></i> Compliance Progress</div>
+        <div class="big-progress-bar">
+          <div class="big-progress-fill" [style.width]="calculateScore() + '%'"></div>
+          <span class="big-progress-label">{{ calculateScore() }}%</span>
+        </div>
+        <div class="progress-legend">
+          <span class="legend-item legend-done"><i class="fas fa-square"></i> Implemented ({{ getImplementedCount() }})</span>
+          <span class="legend-item legend-pending"><i class="fas fa-square"></i> Pending ({{ rules.length - getImplementedCount() }})</span>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <div class="panel-title"><i class="fas fa-circle-half-stroke"></i> Distribution</div>
+        <div class="donut-wrapper">
+          <svg viewBox="0 0 100 100" class="donut-chart">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--bg-elevated)" stroke-width="14"/>
+            <circle cx="50" cy="50" r="38" fill="none"
+              stroke="var(--accent-green)" stroke-width="14" stroke-linecap="round"
+              stroke-dasharray="239"
+              [style.stroke-dashoffset]="239 - (239 * calculateScore() / 100)"
+              transform="rotate(-90 50 50)"
+              style="transition: stroke-dashoffset 1s ease;"/>
+          </svg>
+          <div class="donut-center">
+            <span class="donut-pct">{{ calculateScore() }}%</span>
+            <span class="donut-sub">done</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-panel">
+        <div class="panel-title"><i class="fas fa-bell"></i> System Alerts</div>
+        <div class="alert-list">
+          <div class="alert-item alert-red" *ngIf="calculateScore() < 30">
+            <i class="fas fa-circle-xmark"></i>
+            <span>Critical — Compliance below 30%</span>
+          </div>
+          <div class="alert-item alert-yellow" *ngIf="calculateScore() >= 30 && calculateScore() < 70">
+            <i class="fas fa-triangle-exclamation"></i>
+            <span>Warning — Compliance below 70%</span>
+          </div>
+          <div class="alert-item alert-green" *ngIf="calculateScore() >= 70">
+            <i class="fas fa-circle-check"></i>
+            <span>Good — Compliance above 70%</span>
+          </div>
+          <div class="alert-item alert-blue">
+            <i class="fas fa-circle-info"></i>
+            <span>{{ rules.length - getImplementedCount() }} rules pending review</span>
+          </div>
+          <div class="alert-item alert-blue" *ngIf="selectedRule">
+            <i class="fas fa-crosshairs"></i>
+            <span>Rule selected — ready for AI analysis</span>
+          </div>
+          <div class="alert-item alert-grey" *ngIf="!selectedRule">
+            <i class="fas fa-arrow-pointer"></i>
+            <span>No rule selected yet</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="app-content">
+
+    <!-- LEFT PANEL -->
+    <div class="search-panel">
+
+      <div class="section-header">
+        <div class="section-label">
+          <i class="fas fa-list-check"></i>
+          Security Checklist
+        </div>
+        <button class="btn-toggle" (click)="toggleChecklist()">
+          <i class="fas" [class.fa-eye]="!showChecklist" [class.fa-eye-slash]="showChecklist"></i>
+          {{ showChecklist ? 'HIDE' : 'SHOW' }}
+        </button>
+      </div>
+
+      <div *ngIf="showChecklist">
+        <div class="search-wrapper">
+          <input class="search-input" [(ngModel)]="searchText"
+            (ngModelChange)="searchRules()" placeholder="Search security rules...">
+          <i class="fas fa-magnifying-glass search-icon"></i>
+        </div>
+
+        <div class="section-header" style="margin-bottom: 10px;">
+          <div class="section-label">
+            <i class="fas fa-shield-halved"></i> Rules
+          </div>
+          <span class="results-count">{{ filteredRules.length }} / {{ rules.length }}</span>
+        </div>
+
+        <div class="rules-container">
+          <ul class="rules-list" *ngIf="filteredRules.length > 0; else emptySearch">
+            <li class="rule-item"
+              *ngFor="let rule of filteredRules; let i = index"
+              [class.selected]="rule === selectedRule"
+              (click)="selectRule(rule)">
+              <div class="rule-checkbox">
+                <input type="checkbox" [(ngModel)]="rule.selected"
+                  (click)="$event.stopPropagation()" (change)="onCheckboxChange(rule)">
+              </div>
+              <span class="rule-number">{{ (i + 1).toString().padStart(2, '0') }}</span>
+              <span class="rule-text">{{ rule["Verification Requirement"] }}</span>
+            </li>
+          </ul>
+          <ng-template #emptySearch>
+            <div class="empty-state">
+              <i class="fas fa-radar"></i>
+              <p>NO RULES MATCHING<br>"{{ searchText }}"</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="ai-panel">
+
+      <div class="section-label" style="margin-bottom: 10px;">
+        <i class="fas fa-crosshairs"></i> Selected Rule
+      </div>
+
+      <div class="selected-card" [class.has-rule]="selectedRule">
+        <div *ngIf="!selectedRule" class="selected-placeholder">
+          <i class="fas fa-arrow-pointer"></i>
+          <p>CLICK A RULE<br>TO SELECT IT</p>
+        </div>
+        <div *ngIf="selectedRule" class="selected-rule-content">
+          <div class="selected-rule-label"><i class="fas fa-chevron-right"></i> Active Target</div>
+          <div class="selected-rule-text">{{ selectedRule["Verification Requirement"] }}</div>
+        </div>
+      </div>
+
+      <button class="btn-ai" [class.loading]="loading"
+        (click)="explainRule()" [disabled]="!selectedRule || loading">
+        <div class="spinner" *ngIf="loading"></div>
+        <i class="fas fa-microchip btn-icon" *ngIf="!loading"></i>
+        {{ loading ? 'ANALYZING...' : 'EXPLAIN BY AI' }}
       </button>
 
-    </div>
+      <div *ngIf="loading" class="loading-overlay">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        AI engine processing rule...
+      </div>
 
-    <!-- RULE LIST -->
-    <ul class="list-group">
+      <div *ngIf="explanation" class="ai-response-card">
+        <div class="ai-response-header">
+          <div class="ai-label"><i class="fas fa-robot"></i> AI Analysis</div>
+          <button class="btn-speak" (click)="speakText(explanation)">
+            <i class="fas fa-volume-high"></i> SPEAK
+          </button>
+        </div>
+        <div class="ai-response-body">
+          <p class="ai-response-text">{{ explanation }}</p>
+        </div>
+      </div>
 
-      <li class="list-group-item rule-item"
-          *ngFor="let rule of filteredRules">
-
-        <input type="checkbox"
-               [(ngModel)]="rule.selected"
-               (change)="selectRule(rule)"
-               class="me-2">
-
-        <span (click)="selectRule(rule)" class="rule-text">
-          {{ rule["Verification Requirement"] }}
-        </span>
-
-      </li>
-
-    </ul>
-
-    <!-- AI BUTTON -->
-    <button class="btn btn-ai-custom mt-3"
-            (click)="explainRule()"
-            [disabled]="!selectedRule || loading">
-
-      {{ loading ? 'Processing...' : 'Explain by AI' }}
-
-    </button>
-
-    <!-- LOADING TEXT -->
-    <div *ngIf="loading" class="mt-3 text-info">
-      🤖 AI is generating explanation... Please click Search first.
-    </div>
-
-    <!-- AI RESPONSE -->
-    <div *ngIf="explanation" class="alert alert-info mt-3 fade-in">
-
-      {{ explanation }}
-
-      <button class="btn btn-sm btn-dark ms-2"
-              (click)="speakText(explanation)">
-        🔊 Speak
-      </button>
+      <div class="score-card" [class.has-progress]="calculateScore() > 0">
+        <div class="score-label">
+          <i class="fas fa-chart-pie" style="margin-right: 6px; color: var(--accent-primary);"></i>
+          Compliance Score
+        </div>
+        <div class="score-display">
+          <svg class="score-ring" viewBox="0 0 100 100">
+            <circle class="score-ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="score-ring-progress" cx="50" cy="50" r="45"
+              [style.stroke-dashoffset]="283 - (283 * calculateScore() / 100)"/>
+          </svg>
+          <div class="score-value">{{ calculateScore() }}<small>%</small></div>
+        </div>
+        <div class="score-bar-container">
+          <div class="score-bar-label">
+            <span>{{ getImplementedCount() }} implemented</span>
+            <span>{{ rules.length }} total</span>
+          </div>
+          <div class="score-bar">
+            <div class="score-bar-fill" [style.width]="calculateScore() + '%'"></div>
+          </div>
+        </div>
+      </div>
 
     </div>
-
-  </div>
-
-  <!-- SCORE -->
-  <div class="score-box mt-4 text-center">
-    Compliance Security Score
-    <h3>{{ calculateScore() }}%</h3>
-  </div>
+  </main>
 
 </div>

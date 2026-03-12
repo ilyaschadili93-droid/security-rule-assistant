@@ -1,1 +1,120 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================
+   SECUREGUARD — GLOBAL DESIGN SYSTEM
+   Dark Cyber / Terminal Aesthetic
+   ============================================ */
+
+:root {
+  --bg-void: #050810;
+  --bg-deep: #080d1a;
+  --bg-surface: #0d1526;
+  --bg-elevated: #111d35;
+  --bg-card: #0f1a30;
+  --bg-hover: #162040;
+
+  --accent-primary: #00d4ff;
+  --accent-secondary: #0066ff;
+  --accent-green: #00ff88;
+  --accent-red: #ff3366;
+  --accent-yellow: #ffd700;
+  --accent-purple: #9b59ff;
+
+  --text-primary: #e8f4ff;
+  --text-secondary: #7a9bbf;
+  --text-muted: #3d5a7a;
+  --text-accent: #00d4ff;
+
+  --border-subtle: rgba(0, 212, 255, 0.08);
+  --border-active: rgba(0, 212, 255, 0.3);
+  --border-glow: rgba(0, 212, 255, 0.6);
+
+  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.2);
+  --glow-strong: 0 0 40px rgba(0, 212, 255, 0.4);
+  --glow-green: 0 0 20px rgba(0, 255, 136, 0.3);
+
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 212, 255, 0.2);
+  color: var(--accent-primary);
+}
+
+/* Animations globales */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
